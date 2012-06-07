@@ -9,9 +9,14 @@
 <template name="main">
   <header>
     {{#if user}}
-      <p>hello</p>
+    {{#with user}}
+      <label>Username: {{username}}</label>
+      <button class="btn logoutButton">Logout</button>
+    {{/with}}
     {{else}}
-      <p>world</p>
+      <label>Username:</label>
+      <input id="username" name="username" type="text">
+      <button class="btn loginButton">Login</button>
     {{/if}}
   </header>
 </template>
