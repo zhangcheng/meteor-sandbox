@@ -5,11 +5,12 @@ MyRouter = Backbone.Router.extend
 
   home: ->
     console.log "route to home"
-    Session.set 'page', 'home'
+    store.set 'page', 'home'
 
   profile: (username) ->
     console.log "route to profile"
-    Session.set 'page', 'profile'
+    store.set 'page', 'profile'
+    store.set 'username', username
 
 Router = new MyRouter
 
@@ -18,6 +19,9 @@ Meteor.startup ->
 
 Template.main.user = ->
   return store.get('user')
+
+Template.main.page = ->
+  return store.get('page')
 
 Template.main.events =
   'click .loginButton': (e) ->
@@ -29,3 +33,10 @@ Template.main.events =
 
   'click .logoutButton': (e) ->
     store.remove 'user'
+
+Template.home.users = ->
+  Users.find()
+
+Template.profile.user = ->
+  if store.get('page') is 'profile'
+    Users.findOne {username: store.get('username')}

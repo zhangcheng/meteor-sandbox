@@ -20,4 +20,28 @@
       <button class="btn loginButton">Login</button>
     {{/if}}
   </header>
+  <br />
+  <article>
+    {{> home}}
+    <br />
+    {{> profile}}
+  </article>
+</template>
+
+<template name="home">
+  <a href="/">home</a>
+  <ul>
+  {{#each users}}
+    <li><a href="/u/{{username}}">{{username}}</a></li>
+  {{/each}}
+  </ul>
+</template>
+
+<template name="profile">
+  <p>profile</p>
+  {{#if user}}
+  {{#with user}}
+  <p>{{username}}</p>
+  {{/with}}
+  {{/if}}
 </template>
