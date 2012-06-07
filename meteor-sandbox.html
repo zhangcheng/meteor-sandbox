@@ -1,0 +1,17 @@
+<head>
+  <title>meteor-sandbox</title>
+</head>
+
+<body>
+  {{> main}}
+</body>
+
+<template name="main">
+  <header>
+    {{#if user}}
+      <p>hello</p>
+    {{else}}
+      <p>world</p>
+    {{/if}}
+  </header>
+</template>
