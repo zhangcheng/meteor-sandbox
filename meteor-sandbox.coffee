@@ -1,3 +1,3 @@
-@Users = new Meteor.Collection('users');
+Users = new Meteor.Collection('users');
 
 Sessions = new Meteor.Collection('sessions');

@@ -24,7 +24,9 @@
   <article>
     {{> home}}
     <br />
+    {{#if current_page_is "profile"}}
     {{> profile}}
+    {{/if}}
   </article>
 </template>
 
@@ -39,9 +41,13 @@
 
 <template name="profile">
   <p>profile</p>
-  {{#if user}}
-  {{#with user}}
-  <p>{{username}}</p>
-  {{/with}}
+  {{#if is_oneself}}
+  <p>myself</p>
   {{/if}}
+  {{#if thisuser}}
+  <p>user: {{thisuser.username}}</p>
+  {{/if}}
+  {{#unless is_followed}}
+  <a href="#">follow</a>
+  {{/unless}}
 </template>

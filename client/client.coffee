@@ -18,10 +18,10 @@ Meteor.startup ->
   Backbone.history.start pushState: true
 
 Template.main.user = ->
-  return store.get('user')
+  store.get('user')
 
-Template.main.page = ->
-  return store.get('page')
+Template.main.current_page_is = (page) ->
+  store.get('page') is page
 
 Template.main.events =
   'click .loginButton': (e) ->
@@ -37,6 +37,11 @@ Template.main.events =
 Template.home.users = ->
   Users.find()
 
-Template.profile.user = ->
-  if store.get('page') is 'profile'
-    Users.findOne {username: store.get('username')}
+Template.profile.is_oneself = ->
+  store.get('user').username is store.get('username')
+
+Template.profile.thisuser = ->
+  Users.findOne {username: store.get('username')}
+
+Template.profile.is_followed = ->
+  false
