@@ -1,9 +1,15 @@
 MyRouter = Backbone.Router.extend
   routes:
-    "": "home",
+    '': 'home',
+    'u/:username': 'profile'
 
   home: ->
-    Session.set('page', 'home');
+    console.log "route to home"
+    Session.set 'page', 'home'
+
+  profile: (username) ->
+    console.log "route to profile"
+    Session.set 'page', 'profile'
 
 Router = new MyRouter
 
@@ -11,7 +17,7 @@ Meteor.startup ->
   Backbone.history.start pushState: true
 
 Template.main.user = ->
-  return Session.get('user')
+  return store.get('user')
 
 Template.main.events =
   'click .loginButton': (e) ->
@@ -19,7 +25,7 @@ Template.main.events =
     if username
       Meteor.call 'login', username, username, (err, result) ->
         console.log err?, result
-        Session.set 'user', result.user
+        store.set 'user', result.user
 
   'click .logoutButton': (e) ->
-    Session.set 'user', null
+    store.remove 'user'
