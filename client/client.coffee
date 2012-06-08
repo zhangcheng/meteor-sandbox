@@ -5,43 +5,51 @@ MyRouter = Backbone.Router.extend
 
   home: ->
     console.log "route to home"
-    store.set 'page', 'home'
+    showPage Template.users;
 
   profile: (username) ->
     console.log "route to profile"
-    store.set 'page', 'profile'
-    store.set 'username', username
-
-Router = new MyRouter
+    Session.set 'username', username
+    showPage Template.profile;
 
 Meteor.startup ->
-  Backbone.history.start pushState: true
+  Store.get 'login'
+  Meteor.subscribe 'users', ->
+    Router = new MyRouter
+    Backbone.history.start pushState: true
 
-Template.main.user = ->
-  store.get('user')
+Template.user.loggedIn = ->
+  Session.get('login')
 
-Template.main.current_page_is = (page) ->
-  store.get('page') is page
+Template.user.username = ->
+  Session.get('login').username
 
-Template.main.events =
-  'click .loginButton': (e) ->
-    username = $('#username').val()
+Template.user.events =
+  'click #user .login': (e) ->
+    username = $('#user .name').val()
     if username
       Meteor.call 'login', username, username, (err, result) ->
-        console.log err?, result
-        store.set 'user', result.user
+        Store.set 'login', result.user
 
-  'click .logoutButton': (e) ->
-    store.remove 'user'
+  'click #user .logout': (e) ->
+    Store.set 'login', null
 
-Template.home.users = ->
+showPage = (page) ->
+  $('#page').html Meteor.ui.render -> page()
+
+Template.users.users = ->
   Users.find()
 
-Template.profile.is_oneself = ->
-  store.get('user').username is store.get('username')
+Template.profile.profile = ->
+  Users.findOne username: Session.get('username')
 
-Template.profile.thisuser = ->
-  Users.findOne {username: store.get('username')}
+Template.profile.is_oneself = ->
+  thatuser = Users.findOne username: Session.get('username')
+  thatuser._id is Session.get('login')._id
 
 Template.profile.is_followed = ->
-  false
+  thatuser = Users.findOne username: Session.get('username')
+  if thatuser.followers
+    Session.get('login')._id in thatuser.followers
+  else
+    false

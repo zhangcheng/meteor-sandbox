@@ -1,53 +1,50 @@
 <head>
   <title>meteor-sandbox</title>
-  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/store.js/1.1.1/store.min.js"></script>
 </head>
 
 <body>
-  {{> main}}
+  <div id="container">
+    <h1><a href="/">Meteor Sandbox</a></h1>
+
+    {{> user}}
+
+    <div id="page">
+    </div>
+  </div>
 </body>
 
-<template name="main">
-  <header>
-    {{#if user}}
-    {{#with user}}
-      <label>Username: {{username}}</label>
-      <button class="btn logoutButton">Logout</button>
-    {{/with}}
+<template name="user">
+  <div id="user">
+    {{#if loggedIn}}
+    Welcome, {{username}}! <input type="button" class="logout" value="Log out">
     {{else}}
-      <label>Username:</label>
-      <input id="username" name="username" type="text">
-      <button class="btn loginButton">Login</button>
+    <input type="text" class="name" value="Name">
+    <input type="button" class="login" value="Log in">
     {{/if}}
-  </header>
-  <br />
-  <article>
-    {{> home}}
-    <br />
-    {{#if current_page_is "profile"}}
-    {{> profile}}
-    {{/if}}
-  </article>
+  </div>
 </template>
 
-<template name="home">
-  <a href="/">home</a>
-  <ul>
-  {{#each users}}
-    <li><a href="/u/{{username}}">{{username}}</a></li>
-  {{/each}}
-  </ul>
+<template name="users">
+  <div id="users">
+    <ul>
+    {{#each users}}
+      <li>
+        <h2><a href="/u/{{username}}">{{username}}</a></h2>
+      </li>
+    {{/each}}
+    </ul>
+  </div>
 </template>
 
 <template name="profile">
-  <p>profile</p>
+  {{#with profile}}
+    <h2>{{username}}</h2>
+  {{/with}}
   {{#if is_oneself}}
   <p>myself</p>
+  {{else}}
+    {{#unless is_followed}}
+    <a href="#">follow</a>
+    {{/unless}}
   {{/if}}
-  {{#if thisuser}}
-  <p>user: {{thisuser.username}}</p>
-  {{/if}}
-  {{#unless is_followed}}
-  <a href="#">follow</a>
-  {{/unless}}
 </template>

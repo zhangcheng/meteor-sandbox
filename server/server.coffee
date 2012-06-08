@@ -8,6 +8,9 @@ Meteor.startup ->
       password: "2"
     ]
 
+Meteor.publish 'users', ->
+  Users.find()
+
 Meteor.methods
   login: (username, password) ->
     user = Users.findOne {username: username}
