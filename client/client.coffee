@@ -18,13 +18,19 @@ Meteor.startup ->
     Router = new MyRouter
     Backbone.history.start pushState: true
 
-Template.user.loggedIn = ->
+Template.user.is_logged_in = ->
   Session.get('login')
 
 Template.user.username = ->
   Session.get('login').username
 
 Template.user.events =
+  'click #user .register': (e) ->
+    username = $('#user .name').val()
+    if username
+      Meteor.call 'register', username, username, (err, result) ->
+        console.log "register"
+
   'click #user .login': (e) ->
     username = $('#user .name').val()
     if username
@@ -50,6 +56,15 @@ Template.profile.is_oneself = ->
 Template.profile.is_followed = ->
   thatuser = Users.findOne username: Session.get('username')
   if thatuser.followers
-    Session.get('login')._id in thatuser.followers
+    Session.get('login').username in thatuser.followers
   else
     false
+
+Template.profile.events =
+  'click #profile .follow': (e) ->
+    Meteor.call 'follow', Session.get('login').username, Session.get('username'), (err, result) ->
+      console.log "result: ", result
+
+  'click #profile .unfollow': (e) ->
+    Meteor.call 'unfollow', Session.get('login').username, Session.get('username'), (err, result) ->
+      console.log "result: ", result

@@ -15,11 +15,12 @@
 
 <template name="user">
   <div id="user">
-    {{#if loggedIn}}
-    Welcome, {{username}}! <input type="button" class="logout" value="Log out">
+    {{#if is_logged_in}}
+    Welcome, {{username}}! <input type="button" class="logout" value="Logout">
     {{else}}
     <input type="text" class="name" value="Name">
-    <input type="button" class="login" value="Log in">
+    <input type="button" class="register" value="Register">
+    <input type="button" class="login" value="Login">
     {{/if}}
   </div>
 </template>
@@ -37,14 +38,18 @@
 </template>
 
 <template name="profile">
-  {{#with profile}}
-    <h2>{{username}}</h2>
-  {{/with}}
-  {{#if is_oneself}}
-  <p>myself</p>
-  {{else}}
-    {{#unless is_followed}}
-    <a href="#">follow</a>
-    {{/unless}}
-  {{/if}}
+  <div id="profile">
+    {{#with profile}}
+      <h2>{{username}}</h2>
+    {{/with}}
+    {{#if is_oneself}}
+    <p>myself</p>
+    {{else}}
+      {{#unless is_followed}}
+      <input type="button" class="follow" value="Follow">
+      {{else}}
+      <input type="button" class="unfollow" value="Followed | Unfollow">
+      {{/unless}}
+    {{/if}}
+  </div>
 </template>
