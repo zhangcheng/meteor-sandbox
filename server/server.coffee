@@ -43,3 +43,6 @@ Meteor.methods
         Users.update {username: passive}, {$pop: {followers: active}}
         return {}
     return {err: 'not followed'}
+
+  pm: (sender, receiver, msg) ->
+    console.log sender, receiver, msg

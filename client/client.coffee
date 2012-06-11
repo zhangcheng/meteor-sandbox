@@ -14,9 +14,9 @@ MyRouter = Backbone.Router.extend
 
 Meteor.startup ->
   Store.get 'login'
-  Meteor.subscribe 'users', ->
-    Router = new MyRouter
-    Backbone.history.start pushState: true
+  Meteor.subscribe 'users'
+  Router = new MyRouter
+  Backbone.history.start pushState: true
 
 Template.user.is_logged_in = ->
   Session.get('login')
@@ -67,4 +67,9 @@ Template.profile.events =
 
   'click #profile .unfollow': (e) ->
     Meteor.call 'unfollow', Session.get('login').username, Session.get('username'), (err, result) ->
+      console.log "result: ", result
+
+  'click #profile .pm': (e) ->
+    msg = 'Greeting from ' + Session.get('login').username + ' to ' + Session.get('username')
+    Meteor.call 'pm', Session.get('login').username, Session.get('username'), msg, (err, result) ->
       console.log "result: ", result
