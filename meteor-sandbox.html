@@ -58,4 +58,30 @@
       {{/unless}}
     {{/if}}
   </div>
+  {{> messages}}
+</template>
+
+<template name="messages">
+  <div id="messages">
+    <table>
+      <tr>
+        <th>Sender</th>
+        <th>Receiver</th>
+        <th>Message</th>
+        <th>Sent at</th>
+      </tr>
+      {{#each messages}}
+        {{> message}}
+      {{/each}}
+    </table>
+  </div>
+</template>
+
+<template name="message">
+  <tr>
+    <th>{{sender}}</th>
+    <th>{{receiver}}</th>
+    <th>{{msg}}</th>
+    <th>{{sent_at}}</th>
+  </tr>
 </template>

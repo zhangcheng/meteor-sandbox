@@ -5,16 +5,17 @@ MyRouter = Backbone.Router.extend
 
   home: ->
     console.log "route to home"
-    showPage Template.users;
+    showPage Template.users
 
   profile: (username) ->
     console.log "route to profile"
     Session.set 'username', username
-    showPage Template.profile;
+    showPage Template.profile
 
 Meteor.startup ->
   Store.get 'login'
   Meteor.subscribe 'users'
+  Meteor.subscribe 'messages'
   Router = new MyRouter
   Backbone.history.start pushState: true
 
@@ -84,3 +85,6 @@ Template.profile.events =
           console.log msg
           Meteor.call 'pm', Session.get('login').username, Session.get('username'), msg, (err, result) ->
             console.log "result: ", result
+
+Template.messages.messages = ->
+  Messages.find {$or: [{sender: Session.get('login').username}, {receiver: Session.get('login').username}]}

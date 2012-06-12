@@ -10,6 +10,9 @@ Meteor.startup ->
 Meteor.publish 'users', ->
   Users.find()
 
+Meteor.publish 'messages', ->
+  Messages.find()
+
 Meteor.methods
   register: (username, password) ->
     user = Users.findOne {username: username}
