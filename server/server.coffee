@@ -45,4 +45,9 @@ Meteor.methods
     return {err: 'not followed'}
 
   pm: (sender, receiver, msg) ->
-    console.log sender, receiver, msg
+    console.log 'sender:', sender, ', receiver:', receiver, ', msg:', msg
+    Messages.insert
+      sender: sender
+      receiver: receiver
+      msg: msg
+      sent_at: new Date()
