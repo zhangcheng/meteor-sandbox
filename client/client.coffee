@@ -1,3 +1,9 @@
+routes = ->
+  # The routes for the application. This module returns a function.
+  # `match` is match method of the Router
+  (match) ->
+    match '', 'shows#index'
+
 MyRouter = Backbone.Router.extend
   routes:
     '': 'home',
@@ -13,11 +19,44 @@ MyRouter = Backbone.Router.extend
     showPage Template.profile
 
 Meteor.startup ->
+  console.log 'startup'
   Store.get 'login'
   Meteor.subscribe 'users'
   Meteor.subscribe 'messages'
-  Router = new MyRouter
-  Backbone.history.start pushState: true
+#  Router = new MyRouter
+#  Backbone.history.start pushState: true
+  require [
+    'chaplin'
+  ], (Chaplin) ->
+    'use strict'
+    class Application extends Chaplin.Application
+      initialize: ->
+        super
+        console.log 'initialize'
+
+        # Initialize core components
+        @initDispatcher()
+        @initMediator()
+
+        # Application-specific scaffold
+    #    @initControllers()
+
+        # Register all routes and start routing
+        @initRouter routes
+
+        # Freeze the application instance to prevent further changes
+        Object.freeze? this
+
+      # Create aditional mediator properties
+      # ------------------------------------
+      initMediator: ->
+        # Create a user property
+        Chaplin.mediator.user = null
+        # Seal the mediator
+        Chaplin.mediator.seal()
+
+    application = new Application()
+    application.initialize()
 
 Template.user.is_logged_in = ->
   Session.get('login')
