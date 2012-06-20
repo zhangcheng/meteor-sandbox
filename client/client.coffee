@@ -1,7 +1,8 @@
 MyRouter = Backbone.Router.extend
   routes:
     '': 'home',
-    'u/:username': 'profile'
+    'u/:username': 'profile',
+    'todo': 'todo'
 
   home: ->
     console.log "route to home"
@@ -12,12 +13,19 @@ MyRouter = Backbone.Router.extend
     Session.set 'username', username
     showPage Template.profile
 
+  todo: ->
+    console.log "route to todo"
+    showPage Template.todomvc
+
 Meteor.startup ->
-  Store.get 'login'
+#  Store.get 'login'
   Meteor.subscribe 'users'
   Meteor.subscribe 'messages'
   Router = new MyRouter
   Backbone.history.start pushState: true
+#  require ['config'], (config) ->
+#    console.log "require callback"
+#    console.log config
 
 Template.user.is_logged_in = ->
   Session.get('login')

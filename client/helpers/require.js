@@ -15833,60 +15833,39 @@ function(app, $, Backbone, Todo) {
   // [LocalStorage adapter](backbone-localstorage.js)
   // to persist Backbone models within your browser.
 
-  // Defining the application router, you can attach sub routers here.
-  var Router = Backbone.Router.extend({
-    routes: {
-      "": "index"
-    },
+  // Create a new Todo List.
+  var list = new Todo.List();
 
-    index: function() {
-      // Create a new Todo List.
-      var list = new Todo.List();
+  // Create a new layout.
+  var main = new Backbone.LayoutManager({
+    template: "main",
 
-      // Create a new layout.
-      var main = new Backbone.LayoutManager({
-        template: "main",
+    views: {
+      // Attach the root content View to the layout.
+      "form": new Todo.Views.Form({
+        collection: list
+      }),
 
-        views: {
-          // Attach the root content View to the layout.
-          "form": new Todo.Views.Form({
-            collection: list
-          }),
+      // Attach the stats View into the content View.
+      ".stats": new Todo.Views.Stats({
+        collection: list
+      }),
 
-          // Attach the stats View into the content View.
-          ".stats": new Todo.Views.Stats({
-            collection: list
-          }),
-
-          // Attach the list View into the content View.
-          ".list": new Todo.Views.List({
-            collection: list
-          })
-        }
-      });
-
-      // Attach to the DOM
-      main.$el.appendTo("#main");
-
-      // Render
-      main.render();
-
-      // Fetch the data from localStorage
-      list.fetch();
+      // Attach the list View into the content View.
+      ".list": new Todo.Views.List({
+        collection: list
+      })
     }
   });
 
-  // Treat the jQuery ready function as the entry point to the application.
-  // Inside this function, kick-off all initialization, everything up to this
-  // point should be definitions.
-  $(function() {
-    // Define your master router on the application namespace and trigger all
-    // navigation from this instance.
-    app.router = new Router();
+  // Attach to the DOM
+  main.$el.appendTo("#main");
 
-    // Trigger the initial route and enable HTML5 History API support
-    Backbone.history.start({ pushState: true });
-  });
+  // Render
+  main.render();
+
+  // Fetch the data from localStorage
+  list.fetch();
 
   // All navigation that is relative should be passed through the navigate
   // method, to be processed by the router.  If the link has a data-bypass
