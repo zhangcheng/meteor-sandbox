@@ -1,3 +1,9 @@
+routes = ->
+  # The routes for the application. This module returns a function.
+  # `match` is match method of the Router
+  (match) ->
+    match '', 'shows#index'
+
 MyRouter = Backbone.Router.extend
   routes:
     '': 'home',
@@ -16,8 +22,10 @@ Meteor.startup ->
   Store.get 'login'
   Meteor.subscribe 'users'
   Meteor.subscribe 'messages'
-  Router = new MyRouter
-  Backbone.history.start pushState: true
+#  Router = new MyRouter
+#  Backbone.history.start pushState: true
+  require ['backbone'], (Backbone) ->
+    console.log Backbone.VERSION
 
 Template.user.is_logged_in = ->
   Session.get('login')
